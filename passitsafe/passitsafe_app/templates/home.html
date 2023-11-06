@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pass It Safe</title>
+    <title>Home - Pass It Safe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static "style.css" %}">
     <script src="{% static "main.js" %}" defer></script>
@@ -16,36 +16,62 @@
             <div class="brand"><a href=""><i class="fa fa-lock"></i> PassItSafe</a></div>
             <ul>
                 <li><a href="">Home</a></li>
+                {% if request.user.is_anonymous %}
                 <li><a href="javascript:;" onclick="displayModal('login-modal')">Login</a></li>
                 <li><a href="javascript:;" onclick="displayModal('signup-modal')">Sign Up</a></li>
+                {% else %}
                 <li><a href="javascript:;" onclick="displayModal('password-modal')">View</a></li>
                 <li><a href="javascript:;" onclick="displayModal('add-password-modal')">Add</a></li>
+                <li><a href="javascript:;" onclick="document.getElementById('logout-btn').click();">Logout</a></li>
+                <form hidden="true" action="." method="POST">
+                    {% csrf_token %}
+                    <input type="submit" id="logout-btn" name="logout"></input>
+                </form>
+                {% endif %}
             </ul>
         </nav>
         
     </header>
+
+    <!-- Messages displayed here-->
+    {% if messages %}
+        <div class="messages" style="text-align: center;">
+            {% for message in messages %}
+                <p>
+                    {% if message.tags == "error" %}
+                        <i class="fa-fas fa-exclamation" aria-hidden="true"></i>
+                        {% else %}
+                        <i class="fa-fas fa-check" aria-hidden="true"></i>
+                    {% endif %}
+                    &nbsp;{{message}}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
 
     <!-- Modals -->
     <div class="modals-wrapper">
         <span id="close-modal" title="Close"><i class="fa fa-times"></i></span>
         <!-- Login Modal -->
         <div class="modal" id="login-modal">
-            <form action="">
+            <form action="." role="form" method="POST">
+                {% csrf_token %}
                 <h2>Login</h2>
                 <input type="text" name ="username" placeholder="username">
                 <input type="password" name ="password" placeholder="password">
-                <input type="submit" value="login">
+                <input type="submit" value="login" name="login-form">
             </form>
         </div>
         <!-- Signup Modal -->
         <div class="modal" id="signup-modal">
-            <form action="">
+            <form action="." role="form" method="POST">
+                {% csrf_token %}
                 <h2>Sign Up</h2>
                 <input type="text" name ="username" placeholder="username">
                 <input type="email" name ="email" placeholder="email">
                 <input type="password" name ="password" placeholder="password">
-                <input type="password2" name ="password2" placeholder="confirm password">
-                <input type="submit" value="register">
+                <input type="password" name ="password2" placeholder="confirm password">
+                <input type="submit" value="register" name="signup-form">
             </form>
         </div>
         <!-- View Password Modal -->
