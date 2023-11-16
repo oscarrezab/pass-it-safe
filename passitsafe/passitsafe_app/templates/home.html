@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="{% static "style.css" %}">
     <script src="{% static "main.js" %}" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -19,7 +22,6 @@
                 <li><a href="javascript:;" onclick="displayModal('login-modal')">Login</a></li>
                 <li><a href="javascript:;" onclick="displayModal('signup-modal')">Sign Up</a></li>
                 {% else %}
-                <li><a href="javascript:;" onclick="displayModal('password-modal')">View</a></li>
                 <li><a href="javascript:;" onclick="displayModal('add-password-modal')">Add</a></li>
                 <li><a href="javascript:;" onclick="document.getElementById('logout-btn').click();">Logout</a></li>
                 <form hidden="true" action="." method="POST">
@@ -37,11 +39,7 @@
         <div class="messages" style="text-align: center;">
             {% for message in messages %}
                 <p>
-                    {% if message.tags == "error" %}
-                        <i class="fa-fas fa-exclamation" aria-hidden="true"></i>
-                        {% else %}
-                        <i class="fa-fas fa-check" aria-hidden="true"></i>
-                    {% endif %}
+                    </br>
                     &nbsp;{{message}}
                 </p>
             {% endfor %}
@@ -123,7 +121,7 @@
     </div>
 
     <footer>
-        <a href="">Link to the project</a>
+        <a href="https://github.com/oscarrezab" target="_blank">By oscarrezab</a>
     </footer>
     
 </body>
