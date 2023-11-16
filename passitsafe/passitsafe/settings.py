@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -132,3 +133,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+
+if sys.version_info[0] < 3:
+    KEY = os.environ["KEY"].decode('string_escape')
+else:
+    KEY = bytes(os.environ["KEY"], "utf-8").decode('unicode_escape')

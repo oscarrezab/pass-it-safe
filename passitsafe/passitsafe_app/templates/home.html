@@ -15,7 +15,6 @@
         <nav>
             <div class="brand"><a href=""><i class="fa fa-lock"></i> PassItSafe</a></div>
             <ul>
-                <li><a href="">Home</a></li>
                 {% if request.user.is_anonymous %}
                 <li><a href="javascript:;" onclick="displayModal('login-modal')">Login</a></li>
                 <li><a href="javascript:;" onclick="displayModal('signup-modal')">Sign Up</a></li>
@@ -49,6 +48,21 @@
         </div>
     {% endif %}
 
+    <!-- Confirm email -->
+    {% if sec_code %}
+        <div style="text-align: center;">
+            <form action="." method="POST" role="form">
+                {% csrf_token %}
+                <h2>Please confirm your email</h2>
+                <p>Check your email for the confirmation code.</p>
+                <input type="text" name="sec_code" placeholder="6-digit security code"></input>
+                <input type="text" hidden="true" name="user" value="{{user.username}}"></input>
+                <input type="submit" value="Confirm" name="confirm"></input>
+            </form>
+        </div>
+    {% endif %}
+
+
     <!-- Modals -->
     <div class="modals-wrapper">
         <span id="close-modal" title="Close"><i class="fa fa-times"></i></span>
@@ -74,107 +88,38 @@
                 <input type="submit" value="register" name="signup-form">
             </form>
         </div>
-        <!-- View Password Modal -->
-        <div class="modal" id="password-modal">
-            <h2>Name or URL</h2>
-            <img width="80" height="80" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_1280.png" alt="">
-            <div class="text">
-                <input type="email" name ="email" placeholder="email" id="email"> <i class="far fa-copy copy" title="copy to clipboard" onclick="copyText()"></i>
-                <input type="password" name ="username" value="password" id="password"> <i class="far fa-copy copy" title="copy to clipboard" onclick="copyPass()"></i>
-            </div>  
-        </div>
         <!-- Add Password Modal -->
         <div class="modal" id="add-password-modal">
-            <form action="">
+            <form action="." role="form" method="POST">
+                {% csrf_token %}
                 <h2>Add New Password</h2>
                 <input type="text" name ="url" placeholder="website url">
                 <input type="email" name ="email" placeholder="email">
                 <input type="password" name ="password" placeholder="password">
-                <input type="submit" value="save">
+                <input type="submit" value="save" name="add-password">
             </form>
         </div>
     </div>
 
     <div class="container">
+        <!-- One card -->
+        {% for password in passwords %}
         <div class="card">
             <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
+                <a href="javascript:;" onclick="document.getElementById('delete-btn{{password.id}}').click();" class="action-items">Delete</a>
+                <form hidden="true" action="." method="POST">
+                    {% csrf_token %}
+                    <input type="text" hidden="true" name="password-id" value="{{password.id}}"></input>
+                    <input type="submit" id="delete-btn{{password.id}}" name="delete"></input>
+                </form>
             </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
+            <img width="50" height="50" src="{{password.logo}}" alt="">
+            <div class="name">{{password.name}}</div>
+            <!-- View Password Modal -->
+            <input type="email" name ="email" value="{{password.email}}" id="email"> <i class="far fa-copy copy" title="copy to clipboard" onclick="copyText()"></i>
+            <input type="password" name ="username" value="{{password.password}}" id="password"> <i class="far fa-copy copy" title="copy to clipboard" onclick="copyPass()"></i>
         </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
-
-        <div class="card">
-            <div class="actions">&nbsp;Actions
-                <a href="" class="action-items">Delete</a>
-                <a href="" class="action-items">View</a>
-                <a href="" class="action-items">Update</a>
-            </div>
-            <img width="50" height="50" src="https://cdn.pixabay.com/photo/2015/12/11/11/43/google-1088004_960_720.png" alt="">
-            <div class="name">Google Account</div>
-        </div>
+        {% endfor %}
     </div>
 
     <footer>
